@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+firebase-admin
+pydantic
+pydantic-settings
+python-multipart
+python-dotenv
+reportlab
+openpyxl

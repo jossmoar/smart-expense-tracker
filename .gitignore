@@ -141,3 +141,15 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Python
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+backend/.venv/
+backend/venv/
+backend/*.egg-info/
+
+# Firebase service account key — never commit, contains admin credentials
+serviceAccountKey.json
+backend/serviceAccountKey.json
