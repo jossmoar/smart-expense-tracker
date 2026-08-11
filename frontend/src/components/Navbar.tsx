@@ -77,7 +77,7 @@ export function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
         <Link href="/" aria-label="Ima Developer" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Ima Developer" className="h-11 w-auto rounded-lg" />
+          <img src="/logo.png" alt="Ima Developer" className="h-12 w-auto rounded-lg" />
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-3">
