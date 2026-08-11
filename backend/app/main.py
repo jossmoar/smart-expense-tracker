@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.routers import analysis, budgets, expenses, incomes, reports
+from app.routers import analysis, budgets, expenses, incomes, notifications, reports
 
 app = FastAPI(title="Smart Expense Tracker API")
 
@@ -19,6 +19,7 @@ app.include_router(incomes.router)
 app.include_router(budgets.router)
 app.include_router(analysis.router)
 app.include_router(reports.router)
+app.include_router(notifications.router)
 
 
 @app.get("/")

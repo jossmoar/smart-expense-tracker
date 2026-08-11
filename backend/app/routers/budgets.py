@@ -7,10 +7,12 @@ from app.observers.base import BudgetSubject
 from app.observers.firestore_alert_observer import FirestoreAlertObserver
 from app.repositories.budget_repository import BudgetRepository
 from app.repositories.expense_repository import ExpenseRepository
+from app.repositories.notification_repository import NotificationRepository
 
 router = APIRouter(prefix="/budgets", tags=["budgets"])
 budget_repository = BudgetRepository()
 expense_repository = ExpenseRepository()
+notification_repository = NotificationRepository()
 
 
 @router.post("/", response_model=Budget)
@@ -36,9 +38,15 @@ def check_budget(category: str, user_id: str) -> dict:
     spent = sum(
         e.amount for e in expense_repository.list(user_id) if e.category == category
     )
+    exceeded = spent >= budget.amount
 
-    subject = BudgetSubject()
-    subject.subscribe(FirestoreAlertObserver())
-    exceeded = subject.check_budget(user_id, category, spent, budget.amount)
+    already_alerted = any(
+        n.category == category and not n.read
+        for n in notification_repository.list(user_id)
+    )
+    if exceeded and not already_alerted:
+        subject = BudgetSubject()
+        subject.subscribe(FirestoreAlertObserver())
+        subject.check_budget(user_id, category, spent, budget.amount)
 
     return {"spent": round(spent, 2), "limit": budget.amount, "exceeded": exceeded}

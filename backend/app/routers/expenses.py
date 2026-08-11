@@ -4,15 +4,17 @@ from fastapi import APIRouter
 
 from app.models.expense import Expense, ExpenseCreate
 from app.repositories.expense_repository import ExpenseRepository
-from app.services.classifier import classify_expense
+from app.strategies.classification_strategy import ClassificationStrategy
+from app.strategies.keyword_classification_strategy import KeywordClassificationStrategy
 
 router = APIRouter(prefix="/expenses", tags=["expenses"])
 repository = ExpenseRepository()
+classifier: ClassificationStrategy = KeywordClassificationStrategy()
 
 
 @router.post("/", response_model=Expense)
 def create_expense(payload: ExpenseCreate, user_id: str) -> Expense:
-    category = payload.category or classify_expense(payload.description)
+    category = payload.category or classifier.classify(payload.description)
     expense = Expense(id="", user_id=user_id, **{**payload.model_dump(), "category": category})
     return repository.add(expense)
 

@@ -8,6 +8,7 @@ import type {
   Income,
   IncomeInput,
   MonthlyAverage,
+  Notification,
   Prediction,
 } from "@/lib/types";
 
@@ -66,4 +67,9 @@ export const api = {
 
   reportUrl: (userId: string, format: "pdf" | "excel") =>
     `${API_URL}/reports/${format}?user_id=${userId}`,
+
+  listNotifications: (userId: string) =>
+    request<Notification[]>(`/notifications/?user_id=${userId}`),
+  markNotificationRead: (id: string) =>
+    request<{ status: string }>(`/notifications/${id}/read`, { method: "PATCH" }),
 };

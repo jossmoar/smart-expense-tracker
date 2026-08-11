@@ -61,3 +61,13 @@ export interface Prediction {
   predicted_next_month: number;
   based_on_months: string[];
 }
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  category: string;
+  spent: number;
+  limit: number;
+  message: string;
+  read: boolean;
+}

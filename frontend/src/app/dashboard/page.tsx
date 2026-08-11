@@ -11,6 +11,7 @@ import type {
   ExpenseInput,
   Income,
   IncomeInput,
+  Notification,
   Prediction,
 } from "@/lib/types";
 import { Navbar } from "@/components/Navbar";
@@ -32,6 +33,7 @@ export default function DashboardPage() {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [breakdown, setBreakdown] = useState<CategoryBreakdown>({});
   const [prediction, setPrediction] = useState<Prediction | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [dataError, setDataError] = useState<string | null>(null);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
@@ -60,6 +62,13 @@ export default function DashboardPage() {
       setBudgets(budgetsData);
       setBreakdown(breakdownData);
       setPrediction(predictionData);
+
+      // Reconcile every budget against current spend — triggers the backend's
+      // Observer, which persists an alert the first time a category goes over.
+      await Promise.all(
+        budgetsData.map((b) => api.checkBudget(userId, b.category).catch(() => null)),
+      );
+      setNotifications(await api.listNotifications(userId));
     } catch {
       setDataError(
         "No se pudo conectar con el backend. ¿Está corriendo en http://localhost:8000?",
@@ -104,9 +113,14 @@ export default function DashboardPage() {
     await refresh(user!.uid);
   }
 
+  async function handleMarkNotificationRead(id: string) {
+    await api.markNotificationRead(id);
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  }
+
   return (
     <div className="flex flex-1 flex-col bg-background">
-      <Navbar />
+      <Navbar notifications={notifications} onMarkNotificationRead={handleMarkNotificationRead} />
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">

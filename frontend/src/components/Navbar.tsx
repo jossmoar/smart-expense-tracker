@@ -3,8 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { NotificationsBell } from "@/components/NotificationsBell";
+import type { Notification } from "@/lib/types";
 
-export function Navbar() {
+interface NavbarProps {
+  notifications?: Notification[];
+  onMarkNotificationRead?: (id: string) => void;
+}
+
+export function Navbar({ notifications, onMarkNotificationRead }: NavbarProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
 
@@ -22,6 +29,9 @@ export function Navbar() {
         {user && (
           <div className="flex items-center gap-4">
             <span className="hidden text-sm text-muted sm:inline">{user.email}</span>
+            {notifications && onMarkNotificationRead && (
+              <NotificationsBell notifications={notifications} onMarkRead={onMarkNotificationRead} />
+            )}
             <button
               onClick={handleLogout}
               className="rounded-xl border border-hairline px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:text-brand"
