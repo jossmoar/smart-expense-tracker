@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/Modal";
 import type { ExpenseInput } from "@/lib/types";
 
@@ -12,6 +13,7 @@ interface ExpenseModalProps {
 const today = () => new Date().toISOString().slice(0, 10);
 
 export function ExpenseModal({ onClose, onSubmit }: ExpenseModalProps) {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -35,14 +37,14 @@ export function ExpenseModal({ onClose, onSubmit }: ExpenseModalProps) {
   }
 
   return (
-    <Modal title="Agregar gasto" onClose={onClose}>
+    <Modal title={t("expenseModal.title")} onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="number"
           step="0.01"
           min="0"
           required
-          placeholder="Monto"
+          placeholder={t("expenseModal.amount")}
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
@@ -50,14 +52,14 @@ export function ExpenseModal({ onClose, onSubmit }: ExpenseModalProps) {
         <input
           type="text"
           required
-          placeholder="Descripción (ej. Almuerzo en soda)"
+          placeholder={t("expenseModal.description")}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
         />
         <input
           type="text"
-          placeholder="Categoría (opcional — se clasifica sola)"
+          placeholder={t("expenseModal.category")}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
@@ -74,7 +76,7 @@ export function ExpenseModal({ onClose, onSubmit }: ExpenseModalProps) {
           disabled={submitting}
           className="mt-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
         >
-          {submitting ? "Guardando..." : "Agregar gasto"}
+          {submitting ? t("common.saving") : t("expenseModal.submit")}
         </button>
       </form>
     </Modal>

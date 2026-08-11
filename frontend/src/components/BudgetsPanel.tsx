@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import type { Budget, CategoryBreakdown } from "@/lib/types";
 
 interface BudgetsPanelProps {
@@ -12,6 +13,7 @@ interface BudgetsPanelProps {
 const currentMonth = () => new Date().toISOString().slice(0, 7);
 
 export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsPanelProps) {
+  const { t } = useTranslation();
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -30,10 +32,10 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
 
   return (
     <div className="rounded-2xl border border-hairline bg-surface p-4">
-      <p className="mb-3 text-sm font-semibold text-foreground">Presupuestos</p>
+      <p className="mb-3 text-sm font-semibold text-foreground">{t("budgets.title")}</p>
 
       {budgets.length === 0 ? (
-        <p className="text-sm text-muted">No has definido presupuestos todavía.</p>
+        <p className="text-sm text-muted">{t("budgets.empty")}</p>
       ) : (
         <ul className="mb-4 flex flex-col gap-3">
           {budgets.map((budget) => {
@@ -68,7 +70,7 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
         <input
           type="text"
           required
-          placeholder="Categoría"
+          placeholder={t("budgets.categoryPlaceholder")}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
@@ -78,7 +80,7 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
           step="0.01"
           min="0"
           required
-          placeholder="Límite mensual"
+          placeholder={t("budgets.amountPlaceholder")}
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
@@ -88,7 +90,7 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
           disabled={submitting}
           className="rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
         >
-          {submitting ? "Guardando..." : "Definir presupuesto"}
+          {submitting ? t("common.saving") : t("budgets.submit")}
         </button>
       </form>
     </div>

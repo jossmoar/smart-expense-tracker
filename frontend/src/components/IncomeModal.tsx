@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal } from "@/components/Modal";
 import type { IncomeInput } from "@/lib/types";
 
@@ -12,6 +13,7 @@ interface IncomeModalProps {
 const today = () => new Date().toISOString().slice(0, 10);
 
 export function IncomeModal({ onClose, onSubmit }: IncomeModalProps) {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState("");
   const [source, setSource] = useState("");
   const [date, setDate] = useState(today());
@@ -29,14 +31,14 @@ export function IncomeModal({ onClose, onSubmit }: IncomeModalProps) {
   }
 
   return (
-    <Modal title="Agregar ingreso" onClose={onClose}>
+    <Modal title={t("incomeModal.title")} onClose={onClose}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="number"
           step="0.01"
           min="0"
           required
-          placeholder="Monto"
+          placeholder={t("incomeModal.amount")}
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
@@ -44,7 +46,7 @@ export function IncomeModal({ onClose, onSubmit }: IncomeModalProps) {
         <input
           type="text"
           required
-          placeholder="Fuente (ej. Salario, Freelance)"
+          placeholder={t("incomeModal.source")}
           value={source}
           onChange={(e) => setSource(e.target.value)}
           className="rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/40"
@@ -61,7 +63,7 @@ export function IncomeModal({ onClose, onSubmit }: IncomeModalProps) {
           disabled={submitting}
           className="mt-2 rounded-xl bg-income px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
         >
-          {submitting ? "Guardando..." : "Agregar ingreso"}
+          {submitting ? t("common.saving") : t("incomeModal.submit")}
         </button>
       </form>
     </Modal>

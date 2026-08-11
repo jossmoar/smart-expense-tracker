@@ -2,6 +2,7 @@
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { useTranslation } from "react-i18next";
 import type { CategoryBreakdown } from "@/lib/types";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -13,12 +14,13 @@ interface CategoryChartProps {
 }
 
 export function CategoryChart({ breakdown }: CategoryChartProps) {
+  const { t } = useTranslation();
   const categories = Object.keys(breakdown);
 
   if (categories.length === 0) {
     return (
       <p className="rounded-2xl border border-hairline bg-surface p-6 text-center text-sm text-muted">
-        Agrega gastos para ver el desglose por categoría.
+        {t("categoryChart.empty")}
       </p>
     );
   }
@@ -36,7 +38,7 @@ export function CategoryChart({ breakdown }: CategoryChartProps) {
 
   return (
     <div className="rounded-2xl border border-hairline bg-surface p-4">
-      <p className="mb-3 text-sm font-semibold text-foreground">Gasto por categoría</p>
+      <p className="mb-3 text-sm font-semibold text-foreground">{t("categoryChart.title")}</p>
       <div className="mx-auto max-w-[260px]">
         <Doughnut
           data={data}

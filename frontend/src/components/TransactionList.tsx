@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import type { Expense, Income } from "@/lib/types";
 
 type Transaction =
@@ -17,6 +20,8 @@ export function TransactionList({
   onDeleteExpense,
   onDeleteIncome,
 }: TransactionListProps) {
+  const { t } = useTranslation();
+
   const transactions: Transaction[] = [
     ...expenses.map((item): Transaction => ({ kind: "expense", item })),
     ...incomes.map((item): Transaction => ({ kind: "income", item })),
@@ -25,23 +30,23 @@ export function TransactionList({
   if (transactions.length === 0) {
     return (
       <p className="rounded-2xl border border-hairline bg-surface p-6 text-center text-sm text-muted">
-        Todavía no tienes movimientos registrados.
+        {t("transactions.empty")}
       </p>
     );
   }
 
   return (
     <ul className="divide-y divide-hairline rounded-2xl border border-hairline bg-surface">
-      {transactions.map((t) => {
-        const isExpense = t.kind === "expense";
-        const label = isExpense ? t.item.category : t.item.source;
-        const amountLabel = `${isExpense ? "-" : "+"}$${t.item.amount.toFixed(2)}`;
+      {transactions.map((tx) => {
+        const isExpense = tx.kind === "expense";
+        const label = isExpense ? tx.item.category : tx.item.source;
+        const amountLabel = `${isExpense ? "-" : "+"}$${tx.item.amount.toFixed(2)}`;
 
         return (
-          <li key={`${t.kind}-${t.item.id}`} className="flex items-center justify-between gap-3 px-4 py-3">
+          <li key={`${tx.kind}-${tx.item.id}`} className="flex items-center justify-between gap-3 px-4 py-3">
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-foreground">{label}</p>
-              <p className="text-xs text-muted">{t.item.date}</p>
+              <p className="text-xs text-muted">{tx.item.date}</p>
             </div>
             <div className="flex items-center gap-3">
               <span
@@ -52,9 +57,9 @@ export function TransactionList({
               </span>
               <button
                 onClick={() =>
-                  isExpense ? onDeleteExpense(t.item.id) : onDeleteIncome(t.item.id)
+                  isExpense ? onDeleteExpense(tx.item.id) : onDeleteIncome(tx.item.id)
                 }
-                aria-label="Eliminar"
+                aria-label={t("common.delete")}
                 className="text-muted hover:text-expense"
               >
                 ×

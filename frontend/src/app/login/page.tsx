@@ -3,74 +3,105 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 
-function firebaseErrorMessage(code: string): string {
+function firebaseErrorKey(code: string): string {
   switch (code) {
     case "auth/invalid-email":
-      return "El correo no es válido.";
+      return "login.errors.invalidEmail";
     case "auth/user-not-found":
     case "auth/wrong-password":
     case "auth/invalid-credential":
-      return "Correo o contraseña incorrectos.";
+      return "login.errors.wrongCredentials";
     case "auth/email-already-in-use":
-      return "Ya existe una cuenta con ese correo.";
+      return "login.errors.emailInUse";
     case "auth/weak-password":
-      return "La contraseña debe tener al menos 6 caracteres.";
+      return "login.errors.weakPassword";
     default:
-      return "Ocurrió un error. Intenta de nuevo.";
+      return "login.errors.generic";
   }
 }
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { login, register } = useAuth();
   const router = useRouter();
 
   const [mode, setMode] = useState<"login" | "register">("login");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [errorKey, setErrorKey] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    setError(null);
+    setErrorKey(null);
     setSubmitting(true);
     try {
       if (mode === "login") {
         await login(email, password);
       } else {
-        await register(email, password);
+        await register(email, password, firstName, lastName);
       }
       router.push("/dashboard");
     } catch (err) {
       const code = (err as { code?: string }).code ?? "";
-      setError(firebaseErrorMessage(code));
+      setErrorKey(firebaseErrorKey(code));
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <main className="flex flex-1 items-center justify-center bg-background px-6">
+    <main className="flex flex-1 items-center justify-center bg-background px-6 py-10">
       <div className="w-full max-w-sm rounded-2xl border border-hairline bg-surface p-8 shadow-sm">
         <Link href="/" className="text-sm font-medium text-muted hover:text-brand">
-          ← Volver
+          {t("login.back")}
         </Link>
 
         <h1 className="mt-4 text-2xl font-bold text-foreground">
-          {mode === "login" ? "Inicia sesión" : "Crea tu cuenta"}
+          {mode === "login" ? t("login.titleLogin") : t("login.titleRegister")}
         </h1>
         <p className="mt-1 text-sm text-muted">
-          {mode === "login"
-            ? "Entra para ver tu dashboard de gastos."
-            : "Gratis, sin necesidad de tarjeta."}
+          {mode === "login" ? t("login.subtitleLogin") : t("login.subtitleRegister")}
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+          {mode === "register" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-foreground">
+                  {t("login.firstName")}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-full rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand/40"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-foreground">
+                  {t("login.lastName")}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="w-full rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand/40"
+                />
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="mb-1 block text-sm font-medium text-foreground">
-              Correo
+              {t("login.email")}
             </label>
             <input
               type="email"
@@ -78,13 +109,13 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand/40"
-              placeholder="tu@correo.com"
+              placeholder={t("login.emailPlaceholder")}
             />
           </div>
 
           <div>
             <label className="mb-1 block text-sm font-medium text-foreground">
-              Contraseña
+              {t("login.password")}
             </label>
             <input
               type="password"
@@ -93,13 +124,13 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-xl border border-hairline bg-background px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand/40"
-              placeholder="••••••••"
+              placeholder={t("login.passwordPlaceholder")}
             />
           </div>
 
-          {error && (
+          {errorKey && (
             <p className="rounded-lg bg-expense/10 px-3 py-2 text-sm text-expense">
-              {error}
+              {t(errorKey)}
             </p>
           )}
 
@@ -109,23 +140,21 @@ export default function LoginPage() {
             className="mt-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {submitting
-              ? "Un momento..."
+              ? t("login.submitting")
               : mode === "login"
-                ? "Entrar"
-                : "Crear cuenta"}
+                ? t("login.submitLogin")
+                : t("login.submitRegister")}
           </button>
         </form>
 
         <button
           onClick={() => {
-            setError(null);
+            setErrorKey(null);
             setMode((m) => (m === "login" ? "register" : "login"));
           }}
           className="mt-4 w-full text-center text-sm text-muted hover:text-brand"
         >
-          {mode === "login"
-            ? "¿No tienes cuenta? Regístrate"
-            : "¿Ya tienes cuenta? Inicia sesión"}
+          {mode === "login" ? t("login.toggleToRegister") : t("login.toggleToLogin")}
         </button>
       </div>
     </main>
