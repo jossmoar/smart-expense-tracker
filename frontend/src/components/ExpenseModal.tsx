@@ -41,7 +41,7 @@ export function ExpenseModal({ onClose, onSubmit }: ExpenseModalProps) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="number"
-          step="0.01"
+          step="1"
           min="0"
           required
           placeholder={t("expenseModal.amount")}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/lib/currency";
 import type { Expense, Income } from "@/lib/types";
 
 type Transaction =
@@ -40,7 +41,7 @@ export function TransactionList({
       {transactions.map((tx) => {
         const isExpense = tx.kind === "expense";
         const label = isExpense ? tx.item.category : tx.item.source;
-        const amountLabel = `${isExpense ? "-" : "+"}$${tx.item.amount.toFixed(2)}`;
+        const amountLabel = `${isExpense ? "-" : "+"}${formatCurrency(tx.item.amount)}`;
 
         return (
           <li key={`${tx.kind}-${tx.item.id}`} className="flex items-center justify-between gap-3 px-4 py-3">

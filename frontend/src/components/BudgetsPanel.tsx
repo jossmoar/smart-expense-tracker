@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/lib/currency";
 import type { Budget, CategoryBreakdown } from "@/lib/types";
 
 interface BudgetsPanelProps {
@@ -32,7 +33,8 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
 
   return (
     <div className="rounded-2xl border border-hairline bg-surface p-4">
-      <p className="mb-3 text-sm font-semibold text-foreground">{t("budgets.title")}</p>
+      <p className="text-sm font-semibold text-foreground">{t("budgets.title")}</p>
+      <p className="mb-3 text-xs text-muted">{t("budgets.hint")}</p>
 
       {budgets.length === 0 ? (
         <p className="text-sm text-muted">{t("budgets.empty")}</p>
@@ -48,7 +50,10 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
                 <div className="mb-1 flex items-center justify-between text-xs">
                   <span className="font-medium text-foreground">{budget.category}</span>
                   <span className={exceeded ? "text-expense" : "text-muted"}>
-                    ${spent.toFixed(2)} / ${budget.amount.toFixed(2)}
+                    {t("budgets.spentOfLimit", {
+                      spent: formatCurrency(spent),
+                      limit: formatCurrency(budget.amount),
+                    })}
                   </span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-black/5">
@@ -77,7 +82,7 @@ export function BudgetsPanel({ budgets, spentByCategory, onAddBudget }: BudgetsP
         />
         <input
           type="number"
-          step="0.01"
+          step="1"
           min="0"
           required
           placeholder={t("budgets.amountPlaceholder")}

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotifications } from "@/contexts/NotificationsContext";
 import { api } from "@/lib/api";
+import { formatCurrency } from "@/lib/currency";
 import type {
   Budget,
   CategoryBreakdown,
@@ -143,12 +144,13 @@ export default function DashboardPage() {
         )}
 
         <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3">
-          <StatTile label={t("dashboard.stats.income")} value={`$${totalIncome.toFixed(2)}`} accent="var(--color-income)" />
-          <StatTile label={t("dashboard.stats.expense")} value={`$${totalExpense.toFixed(2)}`} accent="var(--color-expense)" />
+          <StatTile label={t("dashboard.stats.income")} value={formatCurrency(totalIncome)} accent="var(--color-income)" />
+          <StatTile label={t("dashboard.stats.expense")} value={formatCurrency(totalExpense)} accent="var(--color-expense)" />
           <StatTile
             label={t("dashboard.stats.balance")}
-            value={`$${balance.toFixed(2)}`}
+            value={formatCurrency(balance)}
             accent={balance >= 0 ? "var(--color-income)" : "var(--color-expense)"}
+            hint={t("dashboard.stats.balanceHint")}
           />
         </div>
 

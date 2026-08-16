@@ -24,7 +24,7 @@ class PDFReportGenerator(ReportGenerator):
         y = 730
         total = 0.0
         for expense in expenses:
-            pdf.drawString(40, y, f"{expense.date}  {expense.category:<15}  ${expense.amount:.2f}")
+            pdf.drawString(40, y, f"{expense.date}  {expense.category:<15}  ₡{expense.amount:,.0f}")
             total += expense.amount
             y -= 16
             if y < 40:
@@ -32,7 +32,7 @@ class PDFReportGenerator(ReportGenerator):
                 y = 760
 
         pdf.setFont("Helvetica-Bold", 11)
-        pdf.drawString(40, y - 10, f"Total: ${total:.2f}")
+        pdf.drawString(40, y - 10, f"Total: ₡{total:,.0f}")
         pdf.save()
         return buffer.getvalue()
 
@@ -48,6 +48,7 @@ class ExcelReportGenerator(ReportGenerator):
 
         for expense in expenses:
             sheet.append([str(expense.date), expense.category, expense.description, expense.amount])
+            sheet.cell(row=sheet.max_row, column=4).number_format = '"₡"#,##0'
 
         buffer = io.BytesIO()
         workbook.save(buffer)

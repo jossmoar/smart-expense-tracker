@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/lib/currency";
 import type { Prediction } from "@/lib/types";
 
 interface PredictionCardProps {
@@ -18,7 +19,7 @@ export function PredictionCard({ prediction }: PredictionCardProps) {
       ) : (
         <>
           <p className="text-2xl font-bold text-brand">
-            ${prediction.predicted_next_month.toFixed(2)}
+            {formatCurrency(prediction.predicted_next_month)}
           </p>
           <p className="mt-1 text-xs text-muted">
             {t("prediction.basedOn", { months: prediction.based_on_months.join(", ") })}

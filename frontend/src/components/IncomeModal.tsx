@@ -35,7 +35,7 @@ export function IncomeModal({ onClose, onSubmit }: IncomeModalProps) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="number"
-          step="0.01"
+          step="1"
           min="0"
           required
           placeholder={t("incomeModal.amount")}
