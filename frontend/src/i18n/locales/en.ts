@@ -134,5 +134,13 @@ export const en = {
       saving: "Saving...",
       delete: "Delete",
     },
+    footer: {
+      pitch:
+        "A real portfolio project: manage your personal expenses with automatic classification and budget alerts. Open source — take a look and use it as inspiration for your own.",
+      emailAriaLabel: "Send email",
+      websiteAriaLabel: "Visit website",
+      linkedinAriaLabel: "Visit LinkedIn",
+      rights: "Made by Joselin Montero.",
+    },
   },
 };

@@ -134,5 +134,13 @@ export const es = {
       saving: "Guardando...",
       delete: "Eliminar",
     },
+    footer: {
+      pitch:
+        "Un proyecto real de portafolio: gestiona tus gastos personales con clasificación automática y alertas de presupuesto. Código abierto — échele un vistazo y úsela de inspiración para el suyo.",
+      emailAriaLabel: "Enviar correo",
+      websiteAriaLabel: "Visitar sitio web",
+      linkedinAriaLabel: "Visitar LinkedIn",
+      rights: "Hecho por Joselin Montero.",
+    },
   },
 };
