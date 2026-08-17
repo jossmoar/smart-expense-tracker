@@ -57,7 +57,7 @@ export default function LoginPage() {
 
   return (
     <main className="flex flex-1 items-center justify-center bg-background px-6 py-10">
-      <div className="w-full max-w-sm rounded-2xl border border-hairline bg-surface p-8 shadow-sm">
+      <div data-aos="fade-up" className="w-full max-w-sm rounded-2xl border border-hairline bg-surface p-8 shadow-sm">
         <Link href="/" className="text-sm font-medium text-muted hover:text-brand">
           {t("login.back")}
         </Link>

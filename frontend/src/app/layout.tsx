@@ -5,6 +5,7 @@ import { NotificationsProvider } from "@/contexts/NotificationsContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LanguageSync } from "@/i18n/LanguageSync";
+import { AosInit } from "@/components/AosInit";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <LanguageSync />
+        <AosInit />
         <AuthProvider>
           <NotificationsProvider>
             <Navbar />

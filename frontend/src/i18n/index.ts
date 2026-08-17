@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import AOS from "aos";
 import { es } from "./locales/es";
 import { en } from "./locales/en";
 
@@ -19,7 +20,14 @@ if (!i18n.isInitialized) {
   });
 
   i18n.on("languageChanged", (lng) => {
-    if (typeof window !== "undefined") localStorage.setItem(LANG_STORAGE_KEY, lng);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(LANG_STORAGE_KEY, lng);
+      // Every t() re-render rewrites [data-aos] elements' className via React,
+      // wiping the "aos-animate" class AOS added imperatively. Re-scan on the
+      // next frame so anything already in view re-animates instead of staying
+      // stuck invisible (AOS's "once" option otherwise never revisits it).
+      requestAnimationFrame(() => AOS.refreshHard());
+    }
   });
 }
 

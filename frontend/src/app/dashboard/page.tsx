@@ -144,18 +144,24 @@ export default function DashboardPage() {
         )}
 
         <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3">
-          <StatTile label={t("dashboard.stats.income")} value={formatCurrency(totalIncome)} accent="var(--color-income)" />
-          <StatTile label={t("dashboard.stats.expense")} value={formatCurrency(totalExpense)} accent="var(--color-expense)" />
-          <StatTile
-            label={t("dashboard.stats.balance")}
-            value={formatCurrency(balance)}
-            accent={balance >= 0 ? "var(--color-income)" : "var(--color-expense)"}
-            hint={t("dashboard.stats.balanceHint")}
-          />
+          <div data-aos="fade-up">
+            <StatTile label={t("dashboard.stats.income")} value={formatCurrency(totalIncome)} accent="var(--color-income)" />
+          </div>
+          <div data-aos="fade-up" data-aos-delay="60">
+            <StatTile label={t("dashboard.stats.expense")} value={formatCurrency(totalExpense)} accent="var(--color-expense)" />
+          </div>
+          <div data-aos="fade-up" data-aos-delay="120">
+            <StatTile
+              label={t("dashboard.stats.balance")}
+              value={formatCurrency(balance)}
+              accent={balance >= 0 ? "var(--color-income)" : "var(--color-expense)"}
+              hint={t("dashboard.stats.balanceHint")}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="flex flex-col gap-6 lg:col-span-2">
+          <div data-aos="fade-right" className="flex flex-col gap-6 lg:col-span-2">
             <TransactionList
               expenses={expenses}
               incomes={incomes}
@@ -165,10 +171,18 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <CategoryChart breakdown={breakdown} />
-            <PredictionCard prediction={prediction} />
-            <BudgetsPanel budgets={budgets} spentByCategory={breakdown} onAddBudget={handleAddBudget} />
-            <ReportButtons userId={user.uid} />
+            <div data-aos="fade-left">
+              <CategoryChart breakdown={breakdown} />
+            </div>
+            <div data-aos="fade-left" data-aos-delay="60">
+              <PredictionCard prediction={prediction} />
+            </div>
+            <div data-aos="fade-left" data-aos-delay="120">
+              <BudgetsPanel budgets={budgets} spentByCategory={breakdown} onAddBudget={handleAddBudget} />
+            </div>
+            <div data-aos="fade-left" data-aos-delay="180">
+              <ReportButtons userId={user.uid} />
+            </div>
           </div>
         </div>
 

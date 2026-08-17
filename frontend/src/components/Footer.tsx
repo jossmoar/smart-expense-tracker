@@ -40,9 +40,14 @@ export function Footer() {
     <footer className="bg-header-bg">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-5 px-4 py-6 sm:flex-row sm:justify-between sm:px-6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/footer-logo.png" alt="Ima Developer" className="h-24 w-auto object-contain sm:h-32" />
+        <img
+          data-aos="fade-right"
+          src="/footer-logo.png"
+          alt="Ima Developer"
+          className="h-24 w-auto object-contain sm:h-32"
+        />
 
-        <div className="flex flex-col items-center gap-3 text-center sm:items-end sm:text-right">
+        <div data-aos="fade-left" className="flex flex-col items-center gap-3 text-center sm:items-end sm:text-right">
           <p className="max-w-xs text-xs text-header-icon">{t("footer.pitch")}</p>
 
           <div className="flex items-center gap-3">

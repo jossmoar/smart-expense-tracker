@@ -19,14 +19,20 @@ export default function LandingPage() {
   return (
     <main className="flex-1 bg-background">
       <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-6 pb-16 pt-20 text-center">
-        <span className="rounded-full bg-teal px-3 py-1 text-xs font-medium text-white">
+        <span data-aos="fade-up" className="rounded-full bg-teal px-3 py-1 text-xs font-medium text-white">
           {t("landing.badge")}
         </span>
-        <h1 className="text-4xl font-bold tracking-tight text-teal md:text-5xl">
+        <h1
+          data-aos="fade-up"
+          data-aos-delay="80"
+          className="text-4xl font-bold tracking-tight text-teal md:text-5xl"
+        >
           {t("landing.heroTitle")}
         </h1>
-        <p className="max-w-xl text-base text-muted">{t("landing.heroSubtitle")}</p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <p data-aos="fade-up" data-aos-delay="140" className="max-w-xl text-base text-muted">
+          {t("landing.heroSubtitle")}
+        </p>
+        <div data-aos="fade-up" data-aos-delay="200" className="flex flex-wrap items-center justify-center gap-3">
           {loading ? null : user ? (
             <button
               onClick={() => router.push("/dashboard")}
@@ -52,13 +58,15 @@ export default function LandingPage() {
       </div>
 
       <div id="features" className="mx-auto max-w-5xl px-6 pb-24">
-        <h2 className="mb-8 text-center text-2xl font-semibold text-teal">
+        <h2 data-aos="fade-up" className="mb-8 text-center text-2xl font-semibold text-teal">
           {t("landing.featuresTitle")}
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {features.map((feature) => (
+          {features.map((feature, i) => (
             <div
               key={feature.title}
+              data-aos="fade-up"
+              data-aos-delay={i * 60}
               className="rounded-2xl border-[1.5px] border-teal bg-surface p-5 shadow-sm"
             >
               <p className="text-lg font-semibold text-teal">{feature.title}</p>

@@ -42,7 +42,7 @@ export default function ProfilePage() {
 
   return (
     <main className="flex flex-1 justify-center bg-background px-6 py-10">
-      <div className="w-full max-w-sm rounded-2xl border border-hairline bg-surface p-8 shadow-sm">
+      <div data-aos="fade-up" className="w-full max-w-sm rounded-2xl border border-hairline bg-surface p-8 shadow-sm">
         <h1 className="text-2xl font-bold text-foreground">{t("profile.title")}</h1>
         <p className="mt-1 text-sm text-muted">{user.email}</p>
 
